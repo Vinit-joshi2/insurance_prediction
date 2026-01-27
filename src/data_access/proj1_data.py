@@ -48,8 +48,8 @@ class Proj1Data:
             print("Fetching data from mongoDB")
             df = pd.DataFrame(list(collection.find()))
             print(f"Data fecthed with len: {len(df)}")
-            if "id" in df.columns.to_list():
-                df = df.drop(columns=["id"], axis=1)
+            if "_id" in df.columns.to_list():
+                df = df.drop(columns=["_id"])
 
             # Optional --> If cols contain "na" value then we can replace na with "np.nan"
             df.replace({"na":np.nan},inplace=True)
