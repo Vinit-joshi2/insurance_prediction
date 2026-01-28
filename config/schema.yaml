@@ -48,5 +48,20 @@ categorical_columns:
 
 
 num_feature:
+  - property_claim
+  - vehicle_claim
+  - policy_annual_premium
+  - insured_zip
+  - policy_number
+  - total_claim_amount
+  - months_as_customer
+  - injury_claim
+  - age
+  - capital-gains
 
+  
+
+drop_columns:
+  - _c39
+  - _id
   
