@@ -63,7 +63,7 @@ class DataTransformations:
             numeric_transformer = StandardScaler()
             logging.info("Tranformation started - StandardScaler")
 
-            num_features = self._schema_config["num_features"]
+            num_features = self._schema_config["num_feature"]
             logging.info("Columns loaded from schema")
 
             # prepricessor pipline
@@ -84,24 +84,48 @@ class DataTransformations:
             logging.exception("Exception occurred in get_data_transformer_object method of DataTransformation class")
             raise MyException(e,sys)
         
-
+    '''
     def _drop_id_columns(self , df):
         # Drop the id and _c39 column
         logging.info("Dropping 'id' and '_c39' columns")
-        drop_col = self.schema_config["drop_columns"]
+        drop_col = self._schema_config["drop_columns"]
         if drop_col in df.columns:
             df = df.drop(drop_col)
         
         return df
-    
+    '''
+
+    def _drop_id_columns(self, df):
+        logging.info("Dropping columns from schema config")
+
+        drop_cols = self._schema_config.get("drop_columns", [])
+
+        # keep only columns that actually exist
+        cols_to_drop = [col for col in drop_cols if col in df.columns]
+
+        if cols_to_drop:
+            df = df.drop(columns=cols_to_drop)
+
+        '''
+        # Testing only 
+        print("Shape:", df.shape)
+        print("Columns:", df.columns.tolist())
+        print("Dtypes:\n", df.dtypes)
+
+        '''
+        return df
 
     
-    def imputer_Num_cat(data, imputer=None):
+
+    '''
+    def imputer_Num_cat(self , data, imputer=None):
 
 
         # data.drop(columns = "_c39" , inplace = True)
 
-        num_cols = [col for col in data.columns if data[col].dtype in ['int','int64', 'int32', 'float64']]
+        num_cols = [col for col in data.columns if data[col].dtype in ['int64', 'int32', 'float64']]
+
+        # num_cols = data.select_dtypes(include=["number"]).columns.tolist()
 
         logging.info("Imputing NAN value from numric columns")
 
@@ -122,6 +146,8 @@ class DataTransformations:
 
         cat_cols = [col for col in data.columns if data[col].dtype == "object"]
 
+        # cat_cols = data.select_dtypes(include=["object"]).columns.tolist()
+
         if imputer is None:
             imputer = SimpleImputer(missing_values=np.nan, strategy="constant" , fill_value="UNKNOWN")
 
@@ -141,10 +167,46 @@ class DataTransformations:
         )
 
         return data
+    '''
+
+
+
+    def imputer_Num_cat(self, data: pd.DataFrame) -> pd.DataFrame:
+
+    # -------- Numeric --------
+        num_cols = data.select_dtypes(include=["number"]).columns.tolist()
+        logging.info(f"Numeric columns: {num_cols}")
+
+        num_imputer = SimpleImputer(strategy="median")
+        num_df = pd.DataFrame(
+            num_imputer.fit_transform(data[num_cols]),
+            columns=num_cols,
+            index=data.index
+        )
+
+        # -------- Categorical --------
+        data = data.replace("?", np.nan)
+        cat_cols = data.select_dtypes(include=["object"]).columns.tolist()
+        logging.info(f"Categorical columns: {cat_cols}")
+
+        cat_imputer = SimpleImputer(strategy="constant", fill_value="UNKNOWN")
+        cat_df = pd.DataFrame(
+            cat_imputer.fit_transform(data[cat_cols]),
+            columns=cat_cols,
+            index=data.index
+        )
+
+        # -------- Combine --------
+        final_df = pd.concat([num_df, cat_df], axis=1)
+
+        return final_df
+
+
+
 
     '''
 
-    def scaling_data(data, scaler=None):
+    def scaling_data(self , data, scaler=None):
 
         logging.info("----------------- Scaling Numeric value -------------------")
         num_cols = data.select_dtypes(include=['int' , 'int64', 'int32', 'float64']).columns.tolist()
@@ -171,7 +233,7 @@ class DataTransformations:
         return data
     '''
     
-    def OHE_cat(data , encoder_col = None , encoder = None) ->pd.DataFrame:
+    def OHE_cat(self , data , encoder_col = None , encoder = None) ->pd.DataFrame:
 
         cat_cols = [col for col in data.columns if data[col].dtype == "object"]
 
@@ -204,7 +266,7 @@ class DataTransformations:
         return data
     
 
-    def OE_cat(data, encoder = None) -> pd.DataFrame:
+    def OE_cat(self , data, encoder = None) -> pd.DataFrame:
         cat_cols = [col for col in data.columns if data[col].dtype == "object"]
 
         ordinal = ['collision_type', 'incident_type', 'incident_severity']
@@ -236,7 +298,7 @@ class DataTransformations:
         return data
 
 
-    def label_encoding(data):
+    def label_encoding(self , data):
 
         cat_cols = data.select_dtypes(include=["object"]).columns.tolist()
 
@@ -282,6 +344,7 @@ class DataTransformations:
             # Apply Customer transformation 
 
             # Train Data
+
             input_feature_train_df = self._drop_id_columns(input_feature_train_df)
             input_feature_train_df = self.imputer_Num_cat(input_feature_train_df)
             input_feature_train_df = self.OHE_cat(input_feature_train_df)
@@ -343,6 +406,10 @@ class DataTransformations:
                 transformed_test_file_path=self.data_transformation_config.transformed_test_file_path
             )
         
+            '''
+            '''
+
+
 
 
         except Exception as e:
