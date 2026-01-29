@@ -300,6 +300,7 @@ class DataTransformations:
 
     def label_encoding(self , data):
 
+        # cat_cols = [col for col in data.columns if data[col].dtype == "object"]
         cat_cols = data.select_dtypes(include=["object"]).columns.tolist()
 
         logging.info("Applying Label  Encoding to Categorical Features")
@@ -350,6 +351,9 @@ class DataTransformations:
             input_feature_train_df = self.OHE_cat(input_feature_train_df)
             input_feature_train_df = self.OE_cat(input_feature_train_df)
             input_feature_train_df = self.label_encoding(input_feature_train_df)
+            target_feature_train_df = train_df[TARGET_COLUMN].map({"N": 0, "Y": 1})
+
+
 
             # Test Data
             input_feature_test_df = self._drop_id_columns(input_feature_test_df)
@@ -357,6 +361,8 @@ class DataTransformations:
             input_feature_test_df = self.OHE_cat(input_feature_test_df)
             input_feature_test_df = self.OE_cat(input_feature_test_df)
             input_feature_test_df = self.label_encoding(input_feature_test_df)
+            target_feature_test_df = test_df[TARGET_COLUMN].map({"N": 0, "Y": 1})
+
 
             logging.info("Custom transformations applied to train and test data")
 
@@ -395,7 +401,7 @@ class DataTransformations:
             save_numpy_array_data(self.data_transformation_config.transformed_train_file_path , array=train_arr)
             save_numpy_array_data(self.data_transformation_config.transformed_test_file_path , array=test_arr)
 
-            logging.info("Saving transformation object and transformed files.")
+            logging.info("Saving transformation object and transformed files.") 
 
             logging.info("Data transformation completed successfully")
 

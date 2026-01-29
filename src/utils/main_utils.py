@@ -58,7 +58,7 @@ def save_numpy_array_data(file_path: str, array: np.array):
     except Exception as e:
         raise MyException(e, sys) from e
 
-
+'''
 def load_numpy_array_data(file_path: str) -> np.array:
     """
     load numpy array data from file
@@ -70,6 +70,16 @@ def load_numpy_array_data(file_path: str) -> np.array:
             return np.load(file_obj)
     except Exception as e:
         raise MyException(e, sys) from e
+'''
+
+def load_numpy_array_data(file_path: str) -> np.array:
+    try:
+        with open(file_path, 'rb') as file_obj:
+            return np.load(file_obj, allow_pickle=True)
+    except Exception as e:
+        raise MyException(e, sys) from e
+
+
 
 
 def save_object(file_path: str, obj: object) -> None:
@@ -85,3 +95,21 @@ def save_object(file_path: str, obj: object) -> None:
     except Exception as e:
         raise MyException(e, sys) from e
 
+
+# def drop_columns(df: DataFrame, cols: list)-> DataFrame:
+
+#     """
+#     drop the columns form a pandas DataFrame
+#     df: pandas DataFrame
+#     cols: list of columns to be dropped
+#     """
+#     logging.info("Entered drop_columns methon of utils")
+
+#     try:
+#         df = df.drop(columns=cols, axis=1)
+
+#         logging.info("Exited the drop_columns method of utils")
+        
+#         return df
+#     except Exception as e:
+#         raise MyException(e, sys) from e

@@ -45,3 +45,50 @@ class DataTransformationConfig:
     
 
 
+
+'''
+MODEL_BOOSTING_TYPE = "gbdt"
+MODEL_COLSAMPLE_BYTREE = 1.0
+MODEL_LEARNING_RATE = 0.5
+MODEL_MAX_DEPTH = 10
+MODEL_MIN_CHILD_SAMPLES = 20 
+MODEL_MIN_CHILD_WEIGHT = 0.0001
+MODEL_MIN_SPLIT_GAIN = 0.0
+MODEL_N_ESTIMATORS = 200
+MODEL_N_JOBS = -1
+NUM_LEAVES = 500 , 
+MODEL_OBJECTIVE = "binary"
+MODEL_RANDOM_STATE = None
+MODEL_REG_ALPHA = 0.0
+MODEL_REG_LAMBDA = 0.0
+MODEL_SUBSAMPLE = 0.1
+MODEL_SUBSAMPLE_FOT_BIN = 200000
+'''
+
+@dataclass
+class ModelTrainerConfig:
+    model_trainer_dir:str = os.path.join(training_pipeline_config.artifact_dir , MODEL_TRAINER_DIR_NAME)
+    trained_model_file_path:str = os.path.join(model_trainer_dir , MODEL_TRAINER_TRAINED_MODEL_DIR , MODEL_FILE_NAME)
+
+    expected_accuracy: float = MODEL_TRAINER_EXPECTED_SCORE
+    model_config_file_path:str = MODEL_TRAINER_MODEL_CONFIG_FILE_PATH
+
+    _model_boosting_type=MODEL_BOOSTING_TYPE
+    _model_colsample_bytree = MODEL_COLSAMPLE_BYTREE
+    _model_learning_rate = MODEL_LEARNING_RATE
+    _model_max_depth = MODEL_MAX_DEPTH
+    _model_min_child_samples = MODEL_MIN_CHILD_SAMPLES
+    _model_min_child_weight = MODEL_MIN_CHILD_WEIGHT
+    _model_min_split_gain = MODEL_MIN_SPLIT_GAIN
+    _model_n_estimator = MODEL_N_ESTIMATORS
+    _model_n_jobs = MODEL_N_JOBS
+    _model_num_leaves = MODEL_NUM_LEAVES
+    _model_model_objective = MODEL_OBJECTIVE
+    _model_random_state = MODEL_RANDOM_STATE
+    _model_reg_alpha = MODEL_REG_ALPHA
+    _model_reg_lambda = MODEL_REG_LAMBDA
+    _model_subsample = MODEL_SUBSAMPLE
+    _model_subsample_for_bin = MODEL_SUBSAMPLE_FOT_BIN
+    # _model_class_weight = MODEL_CLASS_WEIGHT
+
+

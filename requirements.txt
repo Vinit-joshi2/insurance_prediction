@@ -6,6 +6,7 @@ matplotlib
 plotly
 seaborn
 scikit-learn
+lightgbm
 pymongo
 from_root
 dill
