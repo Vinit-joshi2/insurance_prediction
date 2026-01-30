@@ -44,27 +44,6 @@ class DataTransformationConfig:
                                                      PREPROCSSING_OBJECT_FILE_NAME)
     
 
-
-
-'''
-MODEL_BOOSTING_TYPE = "gbdt"
-MODEL_COLSAMPLE_BYTREE = 1.0
-MODEL_LEARNING_RATE = 0.5
-MODEL_MAX_DEPTH = 10
-MODEL_MIN_CHILD_SAMPLES = 20 
-MODEL_MIN_CHILD_WEIGHT = 0.0001
-MODEL_MIN_SPLIT_GAIN = 0.0
-MODEL_N_ESTIMATORS = 200
-MODEL_N_JOBS = -1
-NUM_LEAVES = 500 , 
-MODEL_OBJECTIVE = "binary"
-MODEL_RANDOM_STATE = None
-MODEL_REG_ALPHA = 0.0
-MODEL_REG_LAMBDA = 0.0
-MODEL_SUBSAMPLE = 0.1
-MODEL_SUBSAMPLE_FOT_BIN = 200000
-'''
-
 @dataclass
 class ModelTrainerConfig:
     model_trainer_dir:str = os.path.join(training_pipeline_config.artifact_dir , MODEL_TRAINER_DIR_NAME)
@@ -92,3 +71,29 @@ class ModelTrainerConfig:
     # _model_class_weight = MODEL_CLASS_WEIGHT
 
 
+@dataclass
+
+class ModelEvaluationConfig:
+    changed_threshold_score:float = MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE
+    bucket_name:str = MODEL_BUCKET_NAME
+    s2_model_key_path:str = MODEL_FILE_NAME
+
+
+
+@dataclass
+
+class ModelPusherConfig:
+    bucket_name:str = MODEL_BUCKET_NAME
+    s3_model_key_path:str = MODEL_FILE_NAME
+
+
+
+@dataclass
+class InsuranceConfig:
+    model_file_path:str = MODEL_FILE_NAME
+    model_bucket_name:str = MODEL_BUCKET_NAME
+
+
+
+
+    
