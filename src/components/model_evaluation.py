@@ -8,11 +8,14 @@ from src.logger import logging
 from src.utils.main_utils import load_object
 import sys
 import pandas as pd
+import numpy as np
 from typing import Optional
 from src.entity.s3_estimator import Proj1Estimator
 from dataclasses import dataclass
 from sklearn.preprocessing import OneHotEncoder , LabelEncoder , OrdinalEncoder
 from sklearn.impute import SimpleImputer
+from src.constants import SCHEMA_FILE_PATH , TARGET_COLUMN
+from src.utils.main_utils import read_yaml_file
 
 @dataclass
 class EvaluateModelResponse:
@@ -30,6 +33,7 @@ class ModelEvaluation:
             self.model_eval_config = model_eval_config
             self.data_ingestion_artifact = data_ingestion_artifact
             self.model_trainer_artifact = model_trainer_artifact
+            self._schema_config = read_yaml_file(file_path=SCHEMA_FILE_PATH)
         except Exception as e:
             raise MyException(e, sys) from e
 
@@ -191,6 +195,8 @@ class ModelEvaluation:
             x = self.OE_cat(x)
             x = self.label_encoding(x)
 
+            y = y.map({"N": 0, "Y": 1})
+
             trained_model = load_object(file_path=self.model_trainer_artifact.trained_model_file_path)
             logging.info("Trained model loaded/exists.")
             trained_model_f1_score = self.model_trainer_artifact.metric_artifact.f1_score
@@ -217,7 +223,7 @@ class ModelEvaluation:
             raise MyException(e, sys)
 
     def initiate_model_evaluation(self) -> ModelEvaluationArtifact:
-        
+
         
         try:
             print("------------------------------------------------------------------------------------------------")

@@ -14,7 +14,7 @@ from src.components.model_pusher import ModelPusher
 from src.entity.config_entity import(DataIngestionConfig , DataValidationConfig , DataTransformationConfig , ModelTrainerConfig , ModelEvaluationConfig , ModelPusherConfig)
 
 
-from src.entity.artifact_entity import(DataIngestionArtifact , DataValidationArtifact , DataTransformationArtifact , ModelTrainerArtifact , ModelEvaluationArtifacts , ModelPusherArtifact)
+from src.entity.artifact_entity import(DataIngestionArtifact , DataValidationArtifact , DataTransformationArtifact , ModelTrainerArtifact , ModelEvaluationArtifact , ModelPusherArtifact)
 
 
 
@@ -101,12 +101,12 @@ class TrainPipeline:
             raise MyException(e, sys)
         
     def start_model_evaluation(self, data_ingestion_artifact: DataIngestionArtifact,
-                               model_trainer_artifact: ModelTrainerArtifact) -> ModelEvaluationArtifacts:
+                               model_trainer_artifact: ModelTrainerArtifact) -> ModelEvaluationArtifact:
         """
         This method of TrainPipeline class is responsible for starting modle evaluation
         """
         try:
-            model_evaluation = ModelEvaluation(model_eval_config=self.model_evaluation_config,
+            model_evaluation = ModelEvaluation(model_eval_config=self.model_eveluation_config,
                                                data_ingestion_artifact=data_ingestion_artifact,
                                                model_trainer_artifact=model_trainer_artifact)
             model_evaluation_artifact = model_evaluation.initiate_model_evaluation()
@@ -114,7 +114,7 @@ class TrainPipeline:
         except Exception as e:
             raise MyException(e, sys)
 
-    def start_model_pusher(self, model_evaluation_artifact: ModelEvaluationArtifacts) -> ModelPusherArtifact:
+    def start_model_pusher(self, model_evaluation_artifact: ModelEvaluationArtifact) -> ModelPusherArtifact:
         """
         This method of TrainPipeline class is responsible for starting model pushing
         """
