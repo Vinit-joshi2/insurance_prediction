@@ -57,16 +57,7 @@ class SimpleStorageService:
             raise MyException(e, sys) from e
 
     def get_file_object(self, filename: str, bucket_name: str) -> Union[List[object], object]:
-        """
-        Retrieves the file object(s) from the specified bucket based on the filename.
-
-        Args:
-            filename (str): The name of the file to retrieve.
-            bucket_name (str): The name of the S3 bucket.
-
-        Returns:
-            Union[List[object], object]: The S3 file object or list of file objects.
-        """
+       
         logging.info("Entered the get_file_object method of SimpleStorageService class")
         try:
             bucket = self.get_bucket(bucket_name)
@@ -142,16 +133,7 @@ class SimpleStorageService:
             raise MyException(e, sys) from e
 
     def read_csv(self, filename: str, bucket_name: str) -> DataFrame:
-        """
-        Reads a CSV file from the specified S3 bucket and converts it to a DataFrame.
-
-        Args:
-            filename (str): The name of the file in the bucket.
-            bucket_name (str): The name of the S3 bucket.
-
-        Returns:
-            DataFrame: DataFrame created from the CSV file.
-        """
+       
         logging.info("Entered the read_csv method of SimpleStorageService class")
         try:
             csv_obj = self.get_file_object(filename, bucket_name)
