@@ -11,6 +11,8 @@ import pandas as pd
 from typing import Optional
 from src.entity.s3_estimator import Proj1Estimator
 from dataclasses import dataclass
+from sklearn.preprocessing import OneHotEncoder , LabelEncoder , OrdinalEncoder
+from sklearn.impute import SimpleImputer
 
 @dataclass
 class EvaluateModelResponse:
@@ -45,56 +47,149 @@ class ModelEvaluation:
         except Exception as e:
             raise  MyException(e,sys)
         
-    def _map_gender_column(self, df):
-        """Map Gender column to 0 for Female and 1 for Male."""
-        logging.info("Mapping 'Gender' column to binary values")
-        df['Gender'] = df['Gender'].map({'Female': 0, 'Male': 1}).astype(int)
-        return df
 
-    def _create_dummy_columns(self, df):
-        """Create dummy variables for categorical features."""
-        logging.info("Creating dummy variables for categorical features")
-        df = pd.get_dummies(df, drop_first=True)
-        return df
+    def _drop_id_columns(self, df):
+        logging.info("Dropping columns from schema config")
 
-    def _rename_columns(self, df):
-        """Rename specific columns and ensure integer types for dummy columns."""
-        logging.info("Renaming specific columns and casting to int")
-        df = df.rename(columns={
-            "Vehicle_Age_< 1 Year": "Vehicle_Age_lt_1_Year",
-            "Vehicle_Age_> 2 Years": "Vehicle_Age_gt_2_Years"
-        })
-        for col in ["Vehicle_Age_lt_1_Year", "Vehicle_Age_gt_2_Years", "Vehicle_Damage_Yes"]:
-            if col in df.columns:
-                df[col] = df[col].astype('int')
+        drop_cols = self._schema_config.get("drop_columns", [])
+
+        # keep only columns that actually exist
+        cols_to_drop = [col for col in drop_cols if col in df.columns]
+
+        if cols_to_drop:
+            df = df.drop(columns=cols_to_drop)
+
         return df
     
-    def _drop_id_column(self, df):
-        """Drop the 'id' column if it exists."""
-        logging.info("Dropping 'id' column")
-        if "_id" in df.columns:
-            df = df.drop("_id", axis=1)
-        return df
+
+    def imputer_Num_cat(self, data: pd.DataFrame) -> pd.DataFrame:
+
+    # -------- Numeric --------
+        num_cols = data.select_dtypes(include=["number"]).columns.tolist()
+        logging.info(f"Numeric columns: {num_cols}")
+
+        num_imputer = SimpleImputer(strategy="median")
+        num_df = pd.DataFrame(
+            num_imputer.fit_transform(data[num_cols]),
+            columns=num_cols,
+            index=data.index
+        )
+
+    # -------- Categorical --------
+        data = data.replace("?", np.nan)
+        cat_cols = data.select_dtypes(include=["object"]).columns.tolist()
+        logging.info(f"Categorical columns: {cat_cols}")
+
+        cat_imputer = SimpleImputer(strategy="constant", fill_value="UNKNOWN")
+        cat_df = pd.DataFrame(
+            cat_imputer.fit_transform(data[cat_cols]),
+            columns=cat_cols,
+            index=data.index
+        )
+
+        # -------- Combine --------
+        final_df = pd.concat([num_df, cat_df], axis=1)
+
+        return final_df
+    
+
+    def OHE_cat(self , data , encoder_col = None , encoder = None) ->pd.DataFrame:
+
+        cat_cols = [col for col in data.columns if data[col].dtype == "object"]
+
+
+        nominal = ['authorities_contacted', 'incident_state', 'insured_hobbies']
+
+        data_ohe = data[nominal]
+
+        logging.info("Aplying One Hot Encoding to Categorical Features")
+
+        if encoder == None:
+            encoder = OneHotEncoder(
+                handle_unknown="ignore" ,
+                drop = "if_binary"
+            )
+
+            encoder.fit(data_ohe)
+            encoder_col = encoder.get_feature_names_out(data_ohe.columns)
+
+
+        data_encoded = encoder.transform(data_ohe).toarray()
+        data_encoded = pd.DataFrame(data_encoded ,
+                                    index = data_ohe.index ,
+                                    columns = encoder_col
+                                    )
+                
+        data = data.drop(columns=nominal)
+        data = pd.concat([data, data_encoded], axis=1)
+
+        return data
+    
+
+    def OE_cat(self , data, encoder = None) -> pd.DataFrame:
+        cat_cols = [col for col in data.columns if data[col].dtype == "object"]
+
+        ordinal = ['collision_type', 'incident_type', 'incident_severity']
+
+        data_le = data[ordinal]
+
+        collision_type = ['UNKNOWN', 'Side Collision', 'Rear Collision', 'Front Collision']
+        incident_severity = ['Trivial Damage','Minor Damage','Major Damage','Total Loss']
+        incident_type = ['Parked Car','Single Vehicle Collision','Multi-vehicle Collision','Vehicle Theft']
+        
+        logging.info("Aplying Ordinal  Encoding to Categorical Features")
+
+        if encoder == None:
+            # Create object
+            encoder = OrdinalEncoder(categories=[collision_type, incident_type,incident_severity])
+            encoder.fit(data_le)
+
+        ## Transform the data
+        data_encoded = encoder.transform(data_le)
+        data_encoded = pd.DataFrame(data_encoded,
+                                    index = data_le.index,
+                                    columns = data_le.columns)
+
+
+        # Concatenating categorical feature after applying Oridinal Encoding
+        data = data.drop(columns=ordinal)
+        data = pd.concat([data, data_encoded], axis=1)
+
+        return data
+    
+
+    def label_encoding(self , data):
+
+        # cat_cols = [col for col in data.columns if data[col].dtype == "object"]
+        cat_cols = data.select_dtypes(include=["object"]).columns.tolist()
+
+        logging.info("Applying Label  Encoding to Categorical Features")
+
+        for cat in cat_cols:
+
+            le = LabelEncoder()
+
+            data[cat] = le.fit_transform(data[cat])
+
+        return data
+
+        
+
 
     def evaluate_model(self) -> EvaluateModelResponse:
-        """
-        Method Name :   evaluate_model
-        Description :   This function is used to evaluate trained model 
-                        with production model and choose best model 
-        
-        Output      :   Returns bool value based on validation results
-        On Failure  :   Write an exception log and then raise an exception
-        """
+       
         try:
             test_df = pd.read_csv(self.data_ingestion_artifact.test_file_path)
             x, y = test_df.drop(TARGET_COLUMN, axis=1), test_df[TARGET_COLUMN]
 
             logging.info("Test data loaded and now transforming it for prediction...")
 
-            x = self._map_gender_column(x)
-            x = self._drop_id_column(x)
-            x = self._create_dummy_columns(x)
-            x = self._rename_columns(x)
+
+            x = self._drop_id_columns(x)
+            x = self.imputer_Num_cat(x)
+            x = self.OHE_cat(x)
+            x = self.OE_cat(x)
+            x = self.label_encoding(x)
 
             trained_model = load_object(file_path=self.model_trainer_artifact.trained_model_file_path)
             logging.info("Trained model loaded/exists.")
@@ -122,13 +217,8 @@ class ModelEvaluation:
             raise MyException(e, sys)
 
     def initiate_model_evaluation(self) -> ModelEvaluationArtifact:
-        """
-        Method Name :   initiate_model_evaluation
-        Description :   This function is used to initiate all steps of the model evaluation
         
-        Output      :   Returns model evaluation artifact
-        On Failure  :   Write an exception log and then raise an exception
-        """  
+        
         try:
             print("------------------------------------------------------------------------------------------------")
             logging.info("Initialized Model Evaluation Component.")
