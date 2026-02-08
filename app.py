@@ -114,6 +114,10 @@ async def index(request: Request):
     )
 
 
+
+
+
+
 # Route to trigger the model training process
 @app.get("/train")
 async def trainRouteClient():
