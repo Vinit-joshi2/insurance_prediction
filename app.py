@@ -78,14 +78,14 @@ class DataForm:
         form = await self.request.form()
 
         # Policy Information
-        self.policy_number = form.get("policy_number")
-        self.policy_annual_premium = form.get("policy_annual_premium")
-        self.months_as_customer = form.get("months_as_customer")
+        self.policy_number = int(form.get("policy_number")) if form.get("policy_number") else None
+        self.policy_annual_premium = float(form.get("policy_annual_premium")) if form.get("policy_annual_premium") else None
+        self.months_as_customer = int(form.get("months_as_customer")) if form.get("months_as_customer") else None
 
         # Insured Information
-        self.age = form.get("age")
-        self.insured_zip = form.get("insured_zip")
-        self.capital_gains = form.get("capital-gains")
+        self.age = int(form.get("age")) if form.get("age") else None
+        self.insured_zip = int(form.get("insured_zip")) if form.get("insured_zip") else None
+        self.capital_gains = int(form.get("capital-gains")) if form.get("capital-gains") else None
         self.insured_occupation = form.get("insured_occupation")
         self.insured_hobbies = form.get("insured_hobbies")
 
@@ -97,10 +97,10 @@ class DataForm:
         self.authorities_contacted = form.get("authorities_contacted")
 
         # Claims Information
-        self.property_claim = form.get("property_claim")
-        self.vehicle_claim = form.get("vehicle_claim")
-        self.injury_claim = form.get("injury_claim")
-        self.total_claim_amount = form.get("total_claim_amount")
+        self.property_claim = int(form.get("property_claim")) if form.get("property_claim") else None
+        self.vehicle_claim = int(form.get("vehicle_claim")) if form.get("vehicle_claim") else None
+        self.injury_claim = int(form.get("injury_claim")) if form.get("injury_claim") else None
+        self.total_claim_amount = int(form.get("total_claim_amount")) if form.get("total_claim_amount") else None
 
         # Fraud Status
         self.fraud_reported = form.get("fraud_reported")
@@ -141,23 +141,23 @@ async def predictionRouteClient(request: Request):
         await form.get_insurance_data()
 
         insurance_data = InsuranceData(
-            policy_number=form.policy_number,
-            policy_annual_premium=form.policy_annual_premium,
-            months_as_customer=form.months_as_customer,
-            age=form.age,
-            insured_zip=form.insured_zip,
-            capital_gains=form.capital_gains,
-            insured_occupation=form.insured_occupation,
+            incident_severity=form.incident_severity,
             insured_hobbies=form.insured_hobbies,
             incident_type=form.incident_type,
             collision_type=form.collision_type,
-            incident_severity=form.incident_severity,
             incident_state=form.incident_state,
             authorities_contacted=form.authorities_contacted,
             property_claim=form.property_claim,
             vehicle_claim=form.vehicle_claim,
-            injury_claim=form.injury_claim,
+            policy_annual_premium=form.policy_annual_premium,
+            insured_zip=form.insured_zip,
+            policy_number=form.policy_number,
             total_claim_amount=form.total_claim_amount,
+            months_as_customer=form.months_as_customer,
+            injury_claim=form.injury_claim,
+            age=form.age,
+            insured_occupation=form.insured_occupation,
+            capital_gains=form.capital_gains,
             fraud_reported=form.fraud_reported
         )
 
@@ -175,12 +175,18 @@ async def predictionRouteClient(request: Request):
 
         # Render the same HTML page with the prediction result
         return templates.TemplateResponse(
-            "index.html",
+            "insurance_fraud.html",
             {"request": request, "context": status},
         )
 
     except Exception as e:
-        return {"status": "False", "error": f"{e}"}
+        import traceback
+        error_msg = traceback.format_exc()
+        print(f"Error in prediction: {error_msg}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "context": f"Error: {str(e)}"},
+        )
 
 
 # Driver Code
