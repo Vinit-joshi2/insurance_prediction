@@ -201,6 +201,8 @@ class ModelEvaluation:
             logging.info("Trained model loaded/exists.")
             trained_model_f1_score = self.model_trainer_artifact.metric_artifact.f1_score
             logging.info(f"F1_Score for this model: {trained_model_f1_score}")
+            print(f"--------------------------------------> {type(trained_model_f1_score)}")
+
 
             best_model_f1_score=None
             best_model = self.get_best_model()
@@ -218,6 +220,8 @@ class ModelEvaluation:
                                            )
             logging.info(f"Result: {result}")
             return result
+            '''
+            '''
 
         except Exception as e:
             raise MyException(e, sys)
@@ -233,10 +237,15 @@ class ModelEvaluation:
 
             model_evaluation_artifact = ModelEvaluationArtifact(
                 is_model_accepted=evaluate_model_response.is_model_accepted,
+
                 s3_model_path=s3_model_path,
                 trained_model_path=self.model_trainer_artifact.trained_model_file_path,
-                changed_accuracy=evaluate_model_response.difference)
+                changed_accuracy=evaluate_model_response.difference
+                
+                )
 
+            '''
+            '''
             logging.info(f"Model evaluation artifact: {model_evaluation_artifact}")
             return model_evaluation_artifact
         except Exception as e:

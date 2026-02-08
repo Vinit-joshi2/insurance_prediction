@@ -69,7 +69,7 @@ class ModelTrainer:
             precision = precision_score(y_test , y_pred)
             recall = recall_score(y_test , y_pred)
 
-            metric_artifact = ClassificationMetricArtifact(accuracy=accuracy , f1_score=f1_score , precision_score=precision ,recall_score=recall)
+            metric_artifact = ClassificationMetricArtifact(accuracy=accuracy , f1_score=f1 , precision_score=precision ,recall_score=recall)
 
             return model , metric_artifact
         
