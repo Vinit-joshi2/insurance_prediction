@@ -184,7 +184,7 @@ class DataTransformations:
             index=data.index
         )
 
-        # -------- Categorical --------
+    # -------- Categorical --------
         data = data.replace("?", np.nan)
         cat_cols = data.select_dtypes(include=["object"]).columns.tolist()
         logging.info(f"Categorical columns: {cat_cols}")
