@@ -4,6 +4,9 @@ from typing import Tuple
 import numpy as np
 from lightgbm import LGBMClassifier
 
+import yaml
+
+
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 
 from src.exception import MyException
@@ -33,6 +36,8 @@ class ModelTrainer:
             logging.info("train-test split done.")
 
             # Initialize LightGBM with specified parameters
+
+            # params = config['model_params']['LGBMClassifier']
 
             model = LGBMClassifier(
 
