@@ -50,11 +50,7 @@ class DataTransformations:
 
     def get_data_transformer_object(self) -> Pipeline:
 
-        """
-        Creates and returns a data transformer object for the data, 
-        including gender mapping, dummy variable creation, column renaming,
-        feature scaling, and type adjustments.
-        """
+    
         logging.info("Entered get_data_transformer_object method of DataTransformation class")
 
 
