@@ -12,6 +12,9 @@ from src.constants import APP_HOST, APP_PORT
 from src.pipline.prediction_pipeline import InsuranceData, InsuranceDataClassifier
 from src.pipline.training_pipeline import TrainPipeline
 
+import pickle ,joblib
+
+
 app = FastAPI()
 
 # Render the static file like CSS
@@ -169,17 +172,36 @@ async def predictionRouteClient(request: Request):
         insurance_df = insurance_data.get_insurance_input_data_frame()
 
         # Initialize the prediction pipeline
-        model_predictor = InsuranceDataClassifier()
+
+        # Model from s3 bucket
+        # model_predictor = InsuranceDataClassifier()
+
+
+        # Model from local 
+        model_path = "artifact/02_08_2026_15_52_40/model_trainer/trained_model/model.pkl"
+        preprocessor_path = "artifact/02_08_2026_15_52_40/data_transformation/transformed_object/preprocessing.pkl"
+
+
+        with open(preprocessor_path, "rb") as f1:
+            preprocessor = pickle.load(f1)
+        
+
+        with open(model_path, "rb") as file_obj:
+            model_predictor = pickle.load(file_obj)
+
+
+
+        transformed_df = preprocessor.transform(insurance_df)
 
         # Make a prediction and retrieve the result
-        value = model_predictor.predict(dataframe=insurance_df)[0]
+        value = model_predictor.predict(dataframe=transformed_df)[0]
 
         # Interpret the prediction result
         status = "Fraud Detected" if value == 1 else "No Fraud Detected"
 
         # Render the same HTML page with the prediction result
         return templates.TemplateResponse(
-            "insurance_fraud.html",
+            "index.html",
             {"request": request, "context": status},
         )
 

@@ -45,9 +45,7 @@ class DataTransformations:
         except Exception as e:
             raise MyException(e,sys)
         
-
-
-
+    '''
     def get_data_transformer_object(self) -> Pipeline:
 
     
@@ -79,7 +77,47 @@ class DataTransformations:
         except Exception as e:
             logging.exception("Exception occurred in get_data_transformer_object method of DataTransformation class")
             raise MyException(e,sys)
+
         
+    '''
+
+
+    def get_data_transformer_object(self) -> Pipeline:
+        try:
+            # Columns define karein (Schema se uthayein)
+            num_features = self._schema_config["num_feature"]
+            oh_columns = ['authorities_contacted', 'incident_state', 'insured_hobbies']
+            ordinal_columns = ['collision_type', 'incident_type', 'incident_severity']
+            
+            # Categories for Ordinal
+            collision_type = ['UNKNOWN', 'Side Collision', 'Rear Collision', 'Front Collision']
+            incident_severity = ['Trivial Damage','Minor Damage','Major Damage','Total Loss']
+            incident_type = ['Parked Car','Single Vehicle Collision','Multi-vehicle Collision','Vehicle Theft']
+
+            # Preprocessor Pipeline
+            preprocessor = ColumnTransformer(
+                transformers=[
+                    ("StandardScaler", StandardScaler(), num_features),
+                    ("OneHotEncoder", OneHotEncoder(handle_unknown="ignore"), oh_columns),
+                    ("OrdinalEncoder", OrdinalEncoder(categories=[collision_type, incident_type, incident_severity]), ordinal_columns)
+                ],
+                remainder="passthrough"
+            )
+
+            final_pipeline = Pipeline(steps=[("Preprocessor", preprocessor)])
+            return final_pipeline
+
+        except Exception as e:
+            raise MyException(e, sys)
+
+
+
+
+
+
+
+
+
     '''
     def _drop_id_columns(self , df):
         # Drop the id and _c39 column
@@ -111,7 +149,8 @@ class DataTransformations:
         '''
         return df
 
-    
+  
+
 
 
 
