@@ -1,6 +1,6 @@
 import pickle
 
-preprocessor_path = "artifact/02_08_2026_15_52_40/data_transformation/transformed_object/preprocessing.pkl"
+preprocessor_path = "preprocessing.pkl"
 
 
 with open(preprocessor_path, "rb") as f1:

@@ -174,13 +174,20 @@ async def predictionRouteClient(request: Request):
         # Initialize the prediction pipeline
 
         # Model from s3 bucket
-        # model_predictor = InsuranceDataClassifier()
+        model_predictor = InsuranceDataClassifier()
 
 
+        '''
         # Model from local 
         model_path = "artifact/02_08_2026_15_52_40/model_trainer/trained_model/model.pkl"
-        preprocessor_path = "artifact/02_08_2026_15_52_40/data_transformation/transformed_object/preprocessing.pkl"
+        preprocessor_path = "artifact/04_06_2026_05_27_22/data_transformation/transformed_object/preprocessing.pkl"
+        '''
 
+
+
+        '''
+        model_path = "model.pkl"
+        preprocessor_path = "preprocessing.pkl"
 
         with open(preprocessor_path, "rb") as f1:
             preprocessor = pickle.load(f1)
@@ -189,12 +196,14 @@ async def predictionRouteClient(request: Request):
         with open(model_path, "rb") as file_obj:
             model_predictor = pickle.load(file_obj)
 
+        
 
 
         transformed_df = preprocessor.transform(insurance_df)
 
         # Make a prediction and retrieve the result
-        value = model_predictor.predict(dataframe=transformed_df)[0]
+        '''
+        value = model_predictor.predict(dataframe=insurance_df)[0]
 
         # Interpret the prediction result
         status = "Fraud Detected" if value == 1 else "No Fraud Detected"

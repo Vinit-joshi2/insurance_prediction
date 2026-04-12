@@ -84,32 +84,35 @@ class DataTransformations:
 
     def get_data_transformer_object(self) -> Pipeline:
         try:
-            # Columns define karein (Schema se uthayein)
+            logging.info("Building the preprocessor pipeline...")
             num_features = self._schema_config["num_feature"]
-            oh_columns = ['authorities_contacted', 'incident_state', 'insured_hobbies']
+            
+            # Categorical columns management
+            oh_columns = ['authorities_contacted', 'incident_state', 'insured_hobbies', 'insured_occupation']
             ordinal_columns = ['collision_type', 'incident_type', 'incident_severity']
             
-            # Categories for Ordinal
-            collision_type = ['UNKNOWN', 'Side Collision', 'Rear Collision', 'Front Collision']
-            incident_severity = ['Trivial Damage','Minor Damage','Major Damage','Total Loss']
-            incident_type = ['Parked Car','Single Vehicle Collision','Multi-vehicle Collision','Vehicle Theft']
+            # Exact categories for Ordinal columns
+            collision_list = ['UNKNOWN', 'Side Collision', 'Rear Collision', 'Front Collision']
+            severity_list = ['Trivial Damage','Minor Damage','Major Damage','Total Loss']
+            type_list = ['Parked Car','Single Vehicle Collision','Multi-vehicle Collision','Vehicle Theft']
 
-            # Preprocessor Pipeline
             preprocessor = ColumnTransformer(
                 transformers=[
                     ("StandardScaler", StandardScaler(), num_features),
                     ("OneHotEncoder", OneHotEncoder(handle_unknown="ignore"), oh_columns),
-                    ("OrdinalEncoder", OrdinalEncoder(categories=[collision_type, incident_type, incident_severity]), ordinal_columns)
+                    ("OrdinalEncoder", OrdinalEncoder(
+                        categories=[collision_list, type_list, severity_list],
+                        handle_unknown='use_encoded_value',
+                        unknown_value=-1
+                    ), ordinal_columns)
                 ],
-                remainder="passthrough"
+                remainder="drop" # Safest option for ML pipelines
             )
 
-            final_pipeline = Pipeline(steps=[("Preprocessor", preprocessor)])
-            return final_pipeline
+            return Pipeline(steps=[("Preprocessor", preprocessor)])
 
         except Exception as e:
             raise MyException(e, sys)
-
 
 
 
@@ -273,7 +276,9 @@ class DataTransformations:
 
         return data
     '''
-    
+
+
+    '''
     def OHE_cat(self , data , encoder_col = None , encoder = None) ->pd.DataFrame:
 
         cat_cols = [col for col in data.columns if data[col].dtype == "object"]
@@ -355,6 +360,8 @@ class DataTransformations:
         return data
         
 
+    '''
+
     def initiate_data_transformation(self) -> DataTransformationArtifact:
 
         """
@@ -389,9 +396,12 @@ class DataTransformations:
 
             input_feature_train_df = self._drop_id_columns(input_feature_train_df)
             input_feature_train_df = self.imputer_Num_cat(input_feature_train_df)
+
+            '''
             input_feature_train_df = self.OHE_cat(input_feature_train_df)
             input_feature_train_df = self.OE_cat(input_feature_train_df)
             input_feature_train_df = self.label_encoding(input_feature_train_df)
+            '''
             target_feature_train_df = train_df[TARGET_COLUMN].map({"N": 0, "Y": 1})
 
 
@@ -399,9 +409,12 @@ class DataTransformations:
             # Test Data
             input_feature_test_df = self._drop_id_columns(input_feature_test_df)
             input_feature_test_df = self.imputer_Num_cat(input_feature_test_df)
+            
+            '''
             input_feature_test_df = self.OHE_cat(input_feature_test_df)
             input_feature_test_df = self.OE_cat(input_feature_test_df)
             input_feature_test_df = self.label_encoding(input_feature_test_df)
+            '''
             target_feature_test_df = test_df[TARGET_COLUMN].map({"N": 0, "Y": 1})
 
 
@@ -422,21 +435,70 @@ class DataTransformations:
 
             logging.info("Applying SMOTEENN for handling imbalanced dataset.")
 
+            logging.info("Applying SMOTEENN for handling imbalanced dataset.")
+
             smt = SMOTEENN(sampling_strategy="minority")
+            
+            # Train Resampling
             input_feature_train_final, target_feature_train_final = smt.fit_resample(
                 input_feature_train_arr, target_feature_train_df
             )
+            
+           
+            # but if you want to, use new variables to avoid confusion)
             input_feature_test_final, target_feature_test_final = smt.fit_resample(
                 input_feature_test_arr, target_feature_test_df
             )
-            logging.info("SMOTEENN applied to train-test df.")
+
+
+            logging.info(f"Type of X_final: {type(input_feature_train_final)}")
+            logging.info(f"Type of y_final: {type(target_feature_train_final)}")
+            
+            logging.info(f"Train Shapes: X={input_feature_train_final.shape}, y={target_feature_train_final.shape}")
+            logging.info(f"Test Shapes: X={input_feature_test_final.shape}, y={target_feature_test_final.shape}")
+
+          
+
+
+            logging.info("Converting Sparse Matrix to Dense for concatenation...")
+            
+            
+            X_train_dense = input_feature_train_final.toarray()
+            X_test_dense = input_feature_test_final.toarray()
+
+            
+            y_train_2d = np.array(target_feature_train_final).reshape(-1, 1)
+            y_test_2d = np.array(target_feature_test_final).reshape(-1, 1)
+
+            
+            train_arr = np.c_[X_train_dense, y_train_2d]
+            test_arr = np.c_[X_test_dense, y_test_2d]
+
+            logging.info(f"Final Concatenation Success! Train Shape: {train_arr.shape}")
 
 
 
-            train_arr = np.c_[input_feature_train_final, np.array(target_feature_train_final)]
-            test_arr = np.c_[input_feature_test_final, np.array(target_feature_test_final)]
+
+
+
+
+            '''
+
+            train_arr = np.c_[
+                input_feature_train_final, 
+                np.array(target_feature_train_final).reshape(-1, 1)
+            ]
+            
+            test_arr = np.c_[
+                input_feature_test_final, 
+                np.array(target_feature_test_final).reshape(-1, 1)
+            ]
+
+            '''
             logging.info("feature-target concatenation done for train-test df.")
 
+            logging.info(f"Train array Shape: {train_arr.shape}")
+            logging.info(f"Test array Shape: {test_arr.shape}")
 
             save_object(self.data_transformation_config.transformed_object_file_path , preprocessor)
             save_numpy_array_data(self.data_transformation_config.transformed_train_file_path , array=train_arr)
@@ -456,40 +518,7 @@ class DataTransformations:
             '''
             '''
 
-
-
-
         except Exception as e:
             raise MyException(e,sys)
-
-
-
-
-
-            
-
-
-
-
-
-
-
-    
-
-
-    
-
-
-    
-
-
-    
-
-
-        
-
-
-
-        
 
 
