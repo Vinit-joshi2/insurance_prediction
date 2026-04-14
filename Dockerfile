@@ -1,9 +1,10 @@
 # Use an official Python 3.10 image from Docker Hub
 FROM python:3.10-slim-buster
 
-RUN apt-get update && apt-get install -y \
-    libgomp1 \
-    && rm -rf /var/lib/apt/lists/*
+
+RUN apt-get update || apt-get update && \
+    apt-get install -y --no-install-recommends libgomp1 && \
+    rm -rf /var/lib/apt/lists/*
 
 
 # Set the working directory
