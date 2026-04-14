@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>InsureGuard — Fraud Detection</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="/static/css/new_static.css">
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a class="nav-brand" href="#">
+      <div class="nav-logo-mark">
+        <svg viewBox="0 0 24 24"><path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7z"/></svg>
+      </div>
+      <span class="nav-brand-name">Insure<span>Guard</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#" class="active">Dashboard</a>
+      <a href="#">Claims</a>
+      <a href="#">Reports</a>
+      <a href="#">Settings</a>
+    </div>
+    <span class="nav-badge">Analyst</span>
+  </div>
+</nav>
+
+<div class="page">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-text">
+      <div class="hero-eyebrow">AI Fraud Detection · Live</div>
+      <h1>Detect <em>fraud risks</em><br>before they escalate</h1>
+      <p>Submit claim details for an instant ML-powered risk assessment. Results in under a second.</p>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><span class="hstat-val">98.2%</span><span class="hstat-lbl">Accuracy</span></div>
+      <div class="hstat"><span class="hstat-val">0.4s</span><span class="hstat-lbl">Response</span></div>
+      <div class="hstat"><span class="hstat-val">12K+</span><span class="hstat-lbl">Claims</span></div>
+    </div>
+  </div>
+
+  <!-- MAIN GRID -->
+  <div class="main-grid">
+
+    <!-- FORM CARD -->
+    <div class="card">
+      <div class="form-header">
+        <div class="form-header-left">
+          <h2>New Claim Assessment</h2>
+          <p>Fill all required fields to generate a fraud risk score</p>
+        </div>
+        <div class="progress-pills">
+          <div class="pill done"><div class="pill-num"><span>1</span></div> Policy</div>
+          <div class="pill done"><div class="pill-num"><span>2</span></div> Insured</div>
+          <div class="pill done"><div class="pill-num"><span>3</span></div> Incident</div>
+          <div class="pill done"><div class="pill-num"><span>4</span></div> Claims</div>
+        </div>
+      </div>
+
+      <form method="post" action="/" id="fraud-form">
+        <div class="form-body">
+
+          <!-- SECTION 1: Policy -->
+          <div class="fsection">
+            <div class="fsection-head">
+              <div class="fsection-icon">
+                <svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 10h8M8 14h5"/></svg>
+              </div>
+              <div>
+                <h3>Policy Information</h3>
+                <p>Core policy identifiers and financial details</p>
+              </div>
+            </div>
+            <div class="g3">
+              <div class="field">
+                <label>Policy Number <span class="req">*</span></label>
+                <input type="number" name="policy_number" placeholder="e.g. 123456" required>
+              </div>
+              <div class="field">
+                <label>Annual Premium ($) <span class="req">*</span></label>
+                <input type="number" step="0.01" name="policy_annual_premium" placeholder="0.00" required>
+              </div>
+              <div class="field">
+                <label>Months as Customer <span class="req">*</span></label>
+                <input type="number" name="months_as_customer" placeholder="e.g. 24" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- SECTION 2: Insured -->
+          <div class="fsection">
+            <div class="fsection-head">
+              <div class="fsection-icon">
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M6 20c0-4 3-6 6-6s6 2 6 6"/></svg>
+              </div>
+              <div>
+                <h3>Insured Information</h3>
+                <p>Personal and demographic details</p>
+              </div>
+            </div>
+            <div class="g3">
+              <div class="field">
+                <label>Age <span class="req">*</span></label>
+                <input type="number" name="age" placeholder="e.g. 35" required>
+              </div>
+              <div class="field">
+                <label>ZIP Code <span class="req">*</span></label>
+                <input type="number" name="insured_zip" placeholder="e.g. 94102" required>
+              </div>
+              <div class="field">
+                <label>Capital Gains ($) <span class="req">*</span></label>
+                <input type="number" name="capital-gains" placeholder="0" required>
+              </div>
+            </div>
+            <div class="g2 mt">
+              <div class="field">
+                <label>Occupation <span class="req">*</span></label>
+                <select name="insured_occupation" required>
+                  <option value="">Select occupation</option>
+                  <option value="tech-support">Tech Support</option>
+                  <option value="farming-fishing">Farming / Fishing</option>
+                  <option value="protective-service">Protective Service</option>
+                  <option value="sales">Sales</option>
+                  <option value="exec-managerial">Executive / Managerial</option>
+                  <option value="prof-specialty">Professional Specialty</option>
+                  <option value="machine-op-inspct">Machine Operator</option>
+                  <option value="adm-clerical">Administrative / Clerical</option>
+                  <option value="craft-repair">Craft / Repair</option>
+                  <option value="transport-moving">Transport / Moving</option>
+                  <option value="handlers-cleaners">Handlers / Cleaners</option>
+                  <option value="priv-house-serv">Private House Service</option>
+                  <option value="other-service">Other Service</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Hobbies <span class="req">*</span></label>
+                <select name="insured_hobbies" required>
+                  <option value="">Select hobby</option>
+                  <option value="chess">Chess</option>
+                  <option value="cross-fit">Cross-fit</option>
+                  <option value="reading">Reading</option>
+                  <option value="sleeping">Sleeping</option>
+                  <option value="basketball">Basketball</option>
+                  <option value="hiking">Hiking</option>
+                  <option value="yachting">Yachting</option>
+                  <option value="board-games">Board Games</option>
+                  <option value="camping">Camping</option>
+                  <option value="dancing">Dancing</option>
+                  <option value="exercise">Exercise</option>
+                  <option value="movies">Movies</option>
+                  <option value="polo">Polo</option>
+                  <option value="video-games">Video Games</option>
+                  <option value="golf">Golf</option>
+                  <option value="kayaking">Kayaking</option>
+                  <option value="paintball">Paintball</option>
+                  <option value="bungie-jumping">Bungee Jumping</option>
+                  <option value="base-jumping">Base Jumping</option>
+                  <option value="skydiving">Skydiving</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- SECTION 3: Incident -->
+          <div class="fsection">
+            <div class="fsection-head">
+              <div class="fsection-icon">
+                <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              </div>
+              <div>
+                <h3>Incident Information</h3>
+                <p>Circumstances of the reported incident</p>
+              </div>
+            </div>
+            <div class="g2">
+              <div class="field">
+                <label>Incident Type <span class="req">*</span></label>
+                <select name="incident_type" required>
+                  <option value="">Select type</option>
+                  <option value="Single Vehicle Collision">Single Vehicle Collision</option>
+                  <option value="Multi-vehicle Collision">Multi-vehicle Collision</option>
+                  <option value="Vehicle Theft">Vehicle Theft</option>
+                  <option value="Parked Car">Parked Car</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Collision Type <span class="req">*</span></label>
+                <select name="collision_type" required>
+                  <option value="">Select type</option>
+                  <option value="Front Collision">Front Collision</option>
+                  <option value="Rear Collision">Rear Collision</option>
+                  <option value="Side Collision">Side Collision</option>
+                  <option value="?">Unknown</option>
+                </select>
+              </div>
+            </div>
+            <div class="g3 mt">
+              <div class="field">
+                <label>Severity <span class="req">*</span></label>
+                <select name="incident_severity" required>
+                  <option value="">Select severity</option>
+                  <option value="Minor Damage">Minor Damage</option>
+                  <option value="Major Damage">Major Damage</option>
+                  <option value="Total Loss">Total Loss</option>
+                  <option value="Trivial Damage">Trivial Damage</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>State <span class="req">*</span></label>
+                <select name="incident_state" required>
+                  <option value="">Select state</option>
+                  <option value="SC">South Carolina</option>
+                  <option value="VA">Virginia</option>
+                  <option value="WV">West Virginia</option>
+                  <option value="NC">North Carolina</option>
+                  <option value="NY">New York</option>
+                  <option value="OH">Ohio</option>
+                  <option value="PA">Pennsylvania</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Authorities Contacted <span class="req">*</span></label>
+                <select name="authorities_contacted" required>
+                  <option value="">Select authority</option>
+                  <option value="Police">Police</option>
+                  <option value="Fire">Fire</option>
+                  <option value="Ambulance">Ambulance</option>
+                  <option value="Other">Other</option>
+                  <option value="None">None</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- SECTION 4: Claims -->
+          <div class="fsection" style="margin-bottom:0">
+            <div class="fsection-head">
+              <div class="fsection-icon">
+                <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+              </div>
+              <div>
+                <h3>Claims Information</h3>
+                <p>Financial breakdown of the submitted claim</p>
+              </div>
+            </div>
+            <div class="g4">
+              <div class="field">
+                <label>Property Claim ($)</label>
+                <input type="number" name="property_claim" placeholder="0" id="prop-claim">
+              </div>
+              <div class="field">
+                <label>Vehicle Claim ($)</label>
+                <input type="number" name="vehicle_claim" placeholder="0" id="veh-claim">
+              </div>
+              <div class="field">
+                <label>Injury Claim ($)</label>
+                <input type="number" name="injury_claim" placeholder="0" id="inj-claim">
+              </div>
+              <div class="field">
+                <label>Total Amount ($) <span class="req">*</span></label>
+                <input type="number" name="total_claim_amount" placeholder="0" id="total-claim" required>
+                <span class="hint">Auto-calculated below</span>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- /form-body -->
+
+        <!-- RESULT BLOCK -->
+        <div id="result-block">
+          <div class="result-inner">
+            <div class="result-icon-wrap">
+              <svg id="result-icon" viewBox="0 0 24 24"></svg>
+            </div>
+            <div class="result-copy">
+              <strong id="result-title"></strong>
+              <p id="result-desc"></p>
+              <div class="bar-wrap"><div class="bar-fill" id="bar-fill" style="width:0%"></div></div>
+            </div>
+            <div class="result-score">
+              <div class="score-num" id="score-num">—</div>
+              <div class="score-lbl">Risk score</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flask template result injection -->
+        {% if context %}
+        <div style="margin:0 28px 28px; padding:16px 20px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:10px; font-size:13px; color:#1e429f; font-weight:500;">
+          {{ context }}
+        </div>
+        {% endif %}
+
+        <div class="form-footer">
+          <div class="footer-trust">
+            <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+            AES-256 encrypted &nbsp;·&nbsp; SOC 2 Type II &nbsp;·&nbsp; GDPR compliant
+          </div>
+          <div class="footer-actions">
+            <button type="button" class="btn-ghost" onclick="resetForm()">Reset</button>
+            <button type="submit" class="btn-primary" onclick="runPreview(event)">
+              <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+              Analyze Claim
+            </button>
+          </div>
+        </div>
+      </form>
+    </div><!-- /card -->
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- Risk Meter -->
+      <div class="side-card">
+        <div class="side-card-head"><h4>Risk Meter</h4></div>
+        <div class="side-card-body">
+          <div class="risk-meter">
+            <div class="donut-wrap">
+              <svg viewBox="0 0 100 100">
+                <circle class="donut-bg" cx="50" cy="50" r="40"/>
+                <circle class="donut-fill" id="donut-fill" cx="50" cy="50" r="40"
+                  stroke="#1a56db"
+                  stroke-dasharray="0 251.2"
+                  stroke-dashoffset="0"/>
+              </svg>
+              <div class="donut-center">
+                <span class="donut-pct" id="donut-pct">—</span>
+                <span class="donut-sub">risk</span>
+              </div>
+            </div>
+            <span class="risk-label risk-low" id="risk-label">Awaiting input</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Signal Checklist -->
+      <div class="side-card">
+        <div class="side-card-head"><h4>Fraud Signals</h4></div>
+        <div class="side-card-body">
+          <div class="checklist">
+            <div class="chk-item"><div class="chk-dot" id="sig-total"></div>High total claim amount</div>
+            <div class="chk-item"><div class="chk-dot" id="sig-severity"></div>Total loss severity</div>
+            <div class="chk-item"><div class="chk-dot" id="sig-authority"></div>No authority contacted</div>
+            <div class="chk-item"><div class="chk-dot" id="sig-tenure"></div>Short customer tenure</div>
+            <div class="chk-item"><div class="chk-dot" id="sig-theft"></div>Vehicle theft type</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- How it works -->
+      <div class="side-card">
+        <div class="side-card-head"><h4>How It Works</h4></div>
+        <div class="side-card-body">
+          <div class="info-list">
+            <div class="info-row">
+              <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6M9 8h6M5 3h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2z"/></svg></div>
+              <div><strong>Submit claim data</strong><p>Fill all policy, insured, incident and financial fields.</p></div>
+            </div>
+            <div class="info-row">
+              <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 0v10l6 3"/></svg></div>
+              <div><strong>ML model scores it</strong><p>Our gradient-boosted model runs 40+ feature checks in 0.4s.</p></div>
+            </div>
+            <div class="info-row">
+              <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+              <div><strong>Instant risk score</strong><p>Get a 0–100% fraud probability with key risk signals.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /sidebar -->
+  </div><!-- /main-grid -->
+
+  <footer>
+    &copy; 2025 InsureGuard Analytics &nbsp;·&nbsp;
+    <a href="#">Privacy Policy</a> &nbsp;·&nbsp;
+    <a href="#">Terms of Use</a> &nbsp;·&nbsp;
+    <a href="#">Support</a>
+  </footer>
+</div>
+
+<script>
+  /* Auto-sum claims */
+  ['prop-claim','veh-claim','inj-claim'].forEach(id => {
+    document.getElementById(id).addEventListener('input', () => {
+      const p = parseFloat(document.getElementById('prop-claim').value)||0;
+      const v = parseFloat(document.getElementById('veh-claim').value)||0;
+      const i = parseFloat(document.getElementById('inj-claim').value)||0;
+      document.getElementById('total-claim').value = p+v+i || '';
+      liveUpdate();
+    });
+  });
+  document.getElementById('total-claim').addEventListener('input', liveUpdate);
+  document.querySelectorAll('select').forEach(s => s.addEventListener('change', liveUpdate));
+  document.querySelectorAll('input[name="months_as_customer"]').forEach(i => i.addEventListener('input', liveUpdate));
+
+  function calcScore() {
+    const total = parseFloat(document.getElementById('total-claim').value)||0;
+    const severity = document.querySelector('[name=incident_severity]').value;
+    const auth = document.querySelector('[name=authorities_contacted]').value;
+    const tenure = parseFloat(document.querySelector('[name=months_as_customer]').value)||99;
+    const type = document.querySelector('[name=incident_type]').value;
+
+    let s = 20;
+    if (total > 80000) s += 28; else if (total > 40000) s += 14; else if (total > 15000) s += 6;
+    if (severity === 'Total Loss') s += 20; else if (severity === 'Major Damage') s += 8;
+    if (auth === 'None') s += 16;
+    if (tenure < 6) s += 12; else if (tenure < 12) s += 5;
+    if (type === 'Vehicle Theft') s += 10;
+    return Math.min(s, 97);
+  }
+
+  function updateSignals(score) {
+    const total = parseFloat(document.getElementById('total-claim').value)||0;
+    const severity = document.querySelector('[name=incident_severity]').value;
+    const auth = document.querySelector('[name=authorities_contacted]').value;
+    const tenure = parseFloat(document.querySelector('[name=months_as_customer]').value)||99;
+    const type = document.querySelector('[name=incident_type]').value;
+
+    setDot('sig-total',   total > 40000 ? 'bad' : total > 15000 ? 'warn' : 'ok');
+    setDot('sig-severity', severity === 'Total Loss' ? 'bad' : severity === 'Major Damage' ? 'warn' : 'ok');
+    setDot('sig-authority', auth === 'None' ? 'bad' : auth ? 'ok' : '');
+    setDot('sig-tenure',  tenure < 6 ? 'bad' : tenure < 12 ? 'warn' : 'ok');
+    setDot('sig-theft',   type === 'Vehicle Theft' ? 'bad' : type ? 'ok' : '');
+  }
+
+  function setDot(id, cls) {
+    const el = document.getElementById(id);
+    el.className = 'chk-dot' + (cls ? ' '+cls : '');
+  }
+
+  function liveUpdate() {
+    const score = calcScore();
+    const circ = 2 * Math.PI * 40;
+    const fill = (score / 100) * circ;
+    const df = document.getElementById('donut-fill');
+    df.style.strokeDasharray = fill + ' ' + circ;
+    df.style.stroke = score >= 60 ? '#dc2626' : score >= 35 ? '#d97706' : '#059669';
+    document.getElementById('donut-pct').textContent = score + '%';
+
+    const lbl = document.getElementById('risk-label');
+    if (score >= 60) { lbl.className='risk-label risk-high'; lbl.textContent='High risk'; }
+    else if (score >= 35) { lbl.className='risk-label risk-med'; lbl.textContent='Medium risk'; }
+    else { lbl.className='risk-label risk-low'; lbl.textContent='Low risk'; }
+
+    updateSignals(score);
+  }
+
+  function runPreview(e) {
+    const score = calcScore();
+    const isFraud = score >= 60;
+    const block = document.getElementById('result-block');
+    block.className = 'result-card ' + (isFraud ? 'fraud' : 'legit');
+    block.style.display = 'block';
+
+    document.getElementById('result-title').textContent = isFraud ? 'High fraud risk detected' : 'Claim appears legitimate';
+    document.getElementById('result-desc').textContent = isFraud
+      ? 'This claim has been flagged for manual adjuster review before processing.'
+      : 'No significant fraud indicators found. Eligible for fast-track processing.';
+    document.getElementById('score-num').textContent = score + '%';
+    document.getElementById('bar-fill').style.width = score + '%';
+
+    const icon = document.getElementById('result-icon');
+    if (isFraud) {
+      icon.innerHTML = '<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>';
+    } else {
+      icon.innerHTML = '<path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>';
+    }
+    block.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function resetForm() {
+    document.querySelectorAll('input, select').forEach(el => { el.value = ''; });
+    document.getElementById('result-block').style.display = 'none';
+    const df = document.getElementById('donut-fill');
+    df.style.strokeDasharray = '0 251.2';
+    document.getElementById('donut-pct').textContent = '—';
+    document.getElementById('risk-label').className = 'risk-label risk-low';
+    document.getElementById('risk-label').textContent = 'Awaiting input';
+    ['sig-total','sig-severity','sig-authority','sig-tenure','sig-theft'].forEach(id => {
+      document.getElementById(id).className = 'chk-dot';
+    });
+  }
+</script>
+
+</body>
+</html>
