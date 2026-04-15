@@ -18,7 +18,7 @@ import pickle ,joblib
 app = FastAPI()
 
 # Render the static file like CSS
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="style")
 
 # HTML file
 templates = Jinja2Templates(directory="templates")
@@ -179,8 +179,8 @@ async def predictionRouteClient(request: Request):
 
         '''
         # Model from local 
-        model_path = "artifact/02_08_2026_15_52_40/model_trainer/trained_model/model.pkl"
-        preprocessor_path = "artifact/04_06_2026_05_27_22/data_transformation/transformed_object/preprocessing.pkl"
+        model_path = "model.pkl"
+        preprocessor_path = "preprocessing.pkl"
         '''
 
 
