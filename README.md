@@ -44,6 +44,14 @@ The objective of this project is to build a Production-Ready End-to-End Machine 
 ├── 📁 config/                      # YAML files for model params & schema
 │   ├── model.yaml
 │   └── schema.yaml
+├── 📁 notebook/                    # Notebooks
+│   ├── 1_EDA.ipynb                 # Exploratory Data Analysis - Insurance Claim Prediction
+│   ├── 2_feature_selection.ipynb   # Feature Selection 
+│   ├── 3_preprocess.ipynb          # Data Preprocessing 
+│   ├── 4_Model_Training (1).ipynb  # Model Training & Hyperparameter Tuning
+│   ├── insurance_claims.csv        # Raw dataset
+│   ├── insurance_claim_data.csv    # Cleaned/Processed dataset
+│   └── mongoDB_demo.ipynb          # Database connection testing & Data Fetching Test
 ├── 📁 src/              # Core source code (The Package)
 │   ├── __init__.py
 │   ├── 📁 cloud_storage/           # S3 cloud handlers
