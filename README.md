@@ -44,7 +44,15 @@ The objective of this project is to build a Production-Ready End-to-End Machine 
 ├── 📁 config/                      # YAML files for model params & schema
 │   ├── model.yaml
 │   └── schema.yaml
-├── 📁 [project_name]/              # Core source code (The Package)
+├── 📁 notebook/                    # Notebooks
+│   ├── 1_EDA.ipynb                 # Exploratory Data Analysis - Insurance Claim Prediction
+│   ├── 2_feature_selection.ipynb   # Feature Selection 
+│   ├── 3_preprocess.ipynb          # Data Preprocessing 
+│   ├── 4_Model_Training (1).ipynb  # Model Training & Hyperparameter Tuning
+│   ├── insurance_claims.csv        # Raw dataset
+│   ├── insurance_claim_data.csv    # Cleaned/Processed dataset
+│   └── mongoDB_demo.ipynb          # Database connection testing & Data Fetching Test
+├── 📁 src/              # Core source code (The Package)
 │   ├── __init__.py
 │   ├── 📁 cloud_storage/           # S3 cloud handlers
 │   │   ├── __init__.py
@@ -68,7 +76,12 @@ The objective of this project is to build a Production-Ready End-to-End Machine 
 │   ├── 📁 pipline/                 # Training and prediction orchestration
 │   │   ├── training_pipeline.py
 │   │   └── prediction_pipeline.py
-│   └── 📁 utils/                   # Reusable functions (YAML/JSON loaders)
+│   └── 📁 utils/                   # Reusable functions 
+├── 📁 static/                      # CSS file for ui design
+│   └── 📁 css/
+│       └── style.css
+├── 📁 templates/                   # HTML files for Flask
+│   └── index.html
 ├── app.py                          # Main Flask application
 ├── demo.py                         # Local testing script
 ├── Dockerfile                      # Containerization instructions
