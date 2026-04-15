@@ -44,7 +44,7 @@ The objective of this project is to build a Production-Ready End-to-End Machine 
 ├── 📁 config/                      # YAML files for model params & schema
 │   ├── model.yaml
 │   └── schema.yaml
-├── 📁 [project_name]/              # Core source code (The Package)
+├── 📁 src/              # Core source code (The Package)
 │   ├── __init__.py
 │   ├── 📁 cloud_storage/           # S3 cloud handlers
 │   │   ├── __init__.py
@@ -68,7 +68,12 @@ The objective of this project is to build a Production-Ready End-to-End Machine 
 │   ├── 📁 pipline/                 # Training and prediction orchestration
 │   │   ├── training_pipeline.py
 │   │   └── prediction_pipeline.py
-│   └── 📁 utils/                   # Reusable functions (YAML/JSON loaders)
+│   └── 📁 utils/                   # Reusable functions 
+├── 📁 static/                      # CSS file for ui design
+│   └── 📁 css/
+│       └── style.css
+├── 📁 templates/                   # HTML files for Flask
+│   └── index.html
 ├── app.py                          # Main Flask application
 ├── demo.py                         # Local testing script
 ├── Dockerfile                      # Containerization instructions
