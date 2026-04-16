@@ -24,6 +24,30 @@ The objective of this project is to build a Production-Ready End-to-End Machine 
 
 - Missed (3.8%): These are the 106 orders where the model predicted profit, but they ended up being losses. This represents the tiny margin of error where the company still loses money.
 
+<img src = "images\Performance metrics.png">
+
+1.LightGBM (0.815 Accuracy) LightGBM is clearly our best performer. It didn't just guess; it learned the patterns effectively.
+
+  - F1-Score (0.64): The highest in our list, meaning it has the best balance.
+
+  - Recall (0.60): It caught 60% of all fraud cases. While not 100%, it is significantly better than the basic models.
+
+  - Precision (0.68): When it says "Fraud," it is correct 68% of the time. This means fewer innocent customers are harassed.
+
+2.Gradient Boosting (0.800 Accuracy)
+
+  - Recall (0.54): It catches about half of the frauds.
+
+  - Precision (0.66): It is fairly reliable but slightly less accurate than LightGBM.
+
+  - The Aggressive Model: Decision Tree (0.780 Accuracy)
+
+  - Recall (0.56): It has a decent catch rate, but its Precision (0.60) is lower. This means it might flag more honest customers as suspicious compared to LightGBM.
+
+The Worst Models: Logistic Regression & Random Forest Even after SMOTE, these models struggled:
+
+Random Forest Recall (0.20): This is very poor for fraud detection. It missed 80% of the fraudsters!
+
 
 ##  What I Built
 
