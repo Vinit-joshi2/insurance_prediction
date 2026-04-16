@@ -8,6 +8,19 @@ Insurance companies lose billions of dollars every year due to fake insurance cl
 # The Goal
 The goal of this project is to build an intelligent system that can automatically flag whether an insurance claim is Genuine or Fraudulent.
 
+<img src = "images/image4.png">
+<br>
+<img src = "images/image5.png">
+<br>
+<img src = "images/image6.png">
+<br>
+<br>
+<img src = "images/web1.png">
+<br>
+<img src = "images/web2.png">
+<br>
+<img src = "images/web3.png">
+
 
 # Project Objective
 
