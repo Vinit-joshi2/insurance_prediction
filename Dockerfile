@@ -2,7 +2,11 @@
 FROM python:3.10-slim-buster
 
 
-RUN apt-get update && \
+# Purani line hatao aur yeh dalo:
+RUN sed -i 's/deb.debian.org/ftp.us.debian.org/g' /etc/apt/sources.list || true && \
+    sed -i 's/security.debian.org/ftp.us.debian.org/g' /etc/apt/sources.list || true
+
+RUN apt-get clean && apt-get update && \
     apt-get install -y --no-install-recommends libgomp1 && \
     rm -rf /var/lib/apt/lists/*
 
