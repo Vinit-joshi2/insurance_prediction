@@ -1,5 +1,5 @@
 # Use an official Python 3.10 image from Docker Hub
-FROM python:3.10-slim-buster
+FROM python:3.10-slim-bookworm
 
 
 # Purani line hatao aur yeh dalo:
