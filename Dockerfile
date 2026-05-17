@@ -2,10 +2,9 @@
 FROM python:3.10-slim-buster
 
 
-RUN apt-get update || apt-get update && \
+RUN apt-get update && \
     apt-get install -y --no-install-recommends libgomp1 && \
     rm -rf /var/lib/apt/lists/*
-
 
 # Set the working directory
 WORKDIR /app

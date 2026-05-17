@@ -34,9 +34,7 @@
            docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .  
            docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
            echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-           apt-get update && \
-            apt-get install -y --no-install-recommends libgomp1 && \
-            rm -rf /var/lib/apt/lists/*
+        
 
    Continuous-Deployment:
      needs: Continuous-Integration
