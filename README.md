@@ -31,11 +31,13 @@ The objective of this project is to build a Production-Ready End-to-End Machine 
 - Automates Detection: Implements a high-performance Gradient Boosting model (LightGBM) to classify claims as Fraud or Non-Fraud.
 
 
+On a held-out test set of 200 claims (145 genuine, 55 fraudulent), the LightGBM model's confusion matrix breaks down as:
 
+- **Fraud Caught (Recall = 60%):** Of the 55 fraudulent claims, the model correctly identified 33 - directly preventing those payouts from being approved as genuine.
 
-- Recoverable (96.2%): These are the 2,707 orders that were actual losses and correctly flagged by our model. By applying our suggestion system here, we are essentially "plugging" the leaks in the company's profit.
+- **Fraud Missed (40%):** The remaining 22 fraudulent claims were incorrectly predicted as genuine and would have been paid out undetected - this is the real cost of the model's current recall ceiling, and the clearest target for future improvement.
 
-- Missed (3.8%): These are the 106 orders where the model predicted profit, but they ended up being losses. This represents the tiny margin of error where the company still loses money.
+- **False Alarms (Precision = 68.75%):** Of the 48 claims the model flagged as fraudulent, 15 belonged to genuine customers who would have been wrongly subjected to investigation.
 
 <img src = "images\Performance metrics.png">
 
